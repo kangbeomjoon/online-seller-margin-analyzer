@@ -357,11 +357,11 @@ TypeScript 타입 오류가 없다.
 - Create: `app/src/lib/domain/normalizeOrders.ts`
 - Create: `app/src/test/normalizeOrders.test.ts`
 
-- [ ] **Step 1: 실패 테스트 작성**
+- [x] **Step 1: 실패 테스트 작성**
 
 `normalizeOrders.test.ts`에는 스마트스토어와 쿠팡 행이 같은 `StandardOrder` 구조로 변환되는 테스트를 작성한다.
 
-- [ ] **Step 2: 테스트 실패 확인**
+- [x] **Step 2: 테스트 실패 확인**
 
 Run:
 
@@ -376,7 +376,7 @@ Expected:
 normalize 함수가 없어 실패한다.
 ```
 
-- [ ] **Step 3: 매퍼 구현**
+- [x] **Step 3: 매퍼 구현**
 
 `platformMappers.ts`는 다음 책임을 가진다.
 
@@ -388,7 +388,7 @@ normalizeOrderStatus(status) -> OrderStatus
 
 날짜에서 앞 7자리를 잘라 `orderMonth`를 만든다.
 
-- [ ] **Step 4: CSV 파서 구현**
+- [x] **Step 4: CSV 파서 구현**
 
 `parseCsv.ts`는 PapaParse를 감싸 다음 형태로 제공한다.
 
@@ -398,7 +398,7 @@ export function parseCsv<T>(text: string): T[]
 
 빈 줄은 무시하고, 헤더 기반 객체 배열을 반환한다.
 
-- [ ] **Step 5: 테스트 통과 확인**
+- [x] **Step 5: 테스트 통과 확인**
 
 Run:
 
