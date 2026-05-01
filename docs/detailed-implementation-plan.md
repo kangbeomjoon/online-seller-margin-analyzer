@@ -217,7 +217,7 @@ devDependencies에 vitest 관련 패키지가 추가된다.
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint",
     "test": "vitest run"
   }
 }
