@@ -23,6 +23,9 @@ describe("exportWorkbook", () => {
     expect(workbook.getWorksheet("상품별 마진 분석")?.rowCount).toBeGreaterThan(
       1,
     );
+    expect(workbook.getWorksheet("검증 경고")?.getCell("A2").value).toBe(
+      "수수료 누락 의심",
+    );
   });
 
   it("creates focused workbook variants and exposes fixed portfolio filenames", () => {
@@ -98,7 +101,13 @@ function buildReport(): SampleReport {
     validationReport: {
       missingCostOrders: [],
       suspectedMissingShippingCostOrders: [],
-      suspectedMissingFeeRulePlatforms: [],
+      suspectedMissingFeeRulePlatforms: [
+        {
+          platform: "smartstore",
+          orderCount: 2,
+          orderIds: ["ORDER-002", "ORDER-003"],
+        },
+      ],
       lossProducts: [],
       lowMarginProducts: [],
       excludedOrders: [],

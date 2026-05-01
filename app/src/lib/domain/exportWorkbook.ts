@@ -133,6 +133,16 @@ function addValidationSheet(
     { header: "상태/수치", key: "value", width: 16 },
   ];
   sheet.addRows([
+    ...report.validationReport.suspectedMissingFeeRulePlatforms.map(
+      (warning) => ({
+        category: "수수료 누락 의심",
+        platform: warning.platform,
+        target: warning.orderIds.join(", "),
+        productName: "",
+        optionName: "",
+        value: `${warning.orderCount}건`,
+      }),
+    ),
     ...report.validationReport.missingCostOrders.map((warning) => ({
       category: "원가 미등록",
       platform: warning.platform,
