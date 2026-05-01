@@ -567,7 +567,7 @@ Expected:
 - Create: `app/scripts/sync-sample-data.mjs`
 - Modify: `app/package.json`
 
-- [ ] **Step 1: 샘플 CSV 동기화 스크립트 작성**
+- [x] **Step 1: 샘플 CSV 동기화 스크립트 작성**
 
 루트 `sample-data/`를 원본으로 유지하고, Next.js 앱에서는 `app/public/sample-data/`에서 fetch한다. `app/scripts/sync-sample-data.mjs`는 다음 파일 4개를 복사한다.
 
@@ -590,7 +590,7 @@ Expected:
 }
 ```
 
-- [ ] **Step 2: 로더 구현**
+- [x] **Step 2: 로더 구현**
 
 `loadSampleData.ts`는 `/sample-data/*.csv` 경로에서 fetch하고 다음 함수를 제공한다.
 
@@ -604,6 +604,8 @@ export async function loadSampleData(): Promise<{
 ```
 
 - [ ] **Step 3: 브라우저에서 로딩 확인**
+
+Task 9에서 `샘플 데이터로 체험하기` 버튼이 추가된 뒤 브라우저에서 최종 확인한다.
 
 Run:
 

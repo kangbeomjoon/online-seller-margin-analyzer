@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "npm run sync:sample-data",
+    "prebuild": "npm run sync:sample-data",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "sync:sample-data": "node scripts/sync-sample-data.mjs",
     "test": "vitest run"
   },
   "dependencies": {
