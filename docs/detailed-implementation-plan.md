@@ -6,7 +6,7 @@
 
 **Architecture:** 1차 버전은 A안으로 구현한다. Next.js 클라이언트 앱에서 샘플 CSV를 불러오고, 브라우저에서 CSV 파싱, 표준화, 원가/수수료 조인, 마진 계산, 대시보드 렌더링, 엑셀 다운로드를 처리한다. 서버 API, 로그인, 실제 쇼핑몰 API 연동은 제외한다.
 
-**Tech Stack:** Next.js, TypeScript, Tailwind CSS, PapaParse, Recharts, SheetJS, Vitest, React Testing Library
+**Tech Stack:** Next.js, TypeScript, Tailwind CSS, PapaParse, Recharts, ExcelJS, Vitest, React Testing Library
 
 ---
 
@@ -175,7 +175,7 @@ fee-rules.csv는 헤더 포함 3줄
 - Create: `app/src/app/page.tsx`
 - Create: `app/src/app/globals.css`
 
-- [ ] **Step 1: 앱 생성**
+- [x] **Step 1: 앱 생성**
 
 Run:
 
@@ -190,24 +190,24 @@ Expected:
 Next.js 프로젝트 파일이 app/ 아래 생성된다.
 ```
 
-- [ ] **Step 2: 필요한 라이브러리 설치**
+- [x] **Step 2: 필요한 라이브러리 설치**
 
 Run:
 
 ```bash
 cd app
-npm install papaparse recharts xlsx lucide-react
+npm install papaparse recharts exceljs lucide-react
 npm install -D vitest @testing-library/react @testing-library/jest-dom jsdom @types/papaparse
 ```
 
 Expected:
 
 ```text
-package.json dependencies에 papaparse, recharts, xlsx, lucide-react가 추가된다.
+package.json dependencies에 papaparse, recharts, exceljs, lucide-react가 추가된다.
 devDependencies에 vitest 관련 패키지가 추가된다.
 ```
 
-- [ ] **Step 3: 테스트 스크립트 추가**
+- [x] **Step 3: 테스트 스크립트 추가**
 
 `app/package.json`에 다음 스크립트를 둔다.
 
@@ -223,7 +223,7 @@ devDependencies에 vitest 관련 패키지가 추가된다.
 }
 ```
 
-- [ ] **Step 4: 초기 실행 확인**
+- [x] **Step 4: 초기 실행 확인**
 
 Run:
 
@@ -717,7 +717,7 @@ Expected:
 
 - [ ] **Step 1: 워크북 생성 함수 구현**
 
-SheetJS로 다음 시트를 만든다.
+ExcelJS로 다음 시트를 만든다.
 
 ```text
 표준 주문 데이터
