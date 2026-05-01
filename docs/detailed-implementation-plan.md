@@ -482,7 +482,7 @@ Expected:
 - Create: `app/src/lib/domain/aggregateMetrics.ts`
 - Create: `app/src/test/aggregateMetrics.test.ts`
 
-- [ ] **Step 1: 실패 테스트 작성**
+- [x] **Step 1: 실패 테스트 작성**
 
 다음 집계를 테스트한다.
 
@@ -493,7 +493,7 @@ Expected:
 상품별 집계: productCode/productName/optionName/platform 기준 판매수량, 매출, 비용, 순이익, 마진율, 상태
 ```
 
-- [ ] **Step 2: 집계 함수 구현**
+- [x] **Step 2: 집계 함수 구현**
 
 `aggregateMetrics.ts`는 다음 함수를 제공한다.
 
@@ -503,7 +503,7 @@ export function buildDashboardMetrics(orders: CalculatedOrder[]): DashboardMetri
 
 취소/반품과 원가 미등록 주문은 순이익 집계에서 제외하되, 경고 집계에는 포함할 수 있게 원본 `CalculatedOrder`에는 남긴다.
 
-- [ ] **Step 3: 테스트 통과 확인**
+- [x] **Step 3: 테스트 통과 확인**
 
 Run:
 
