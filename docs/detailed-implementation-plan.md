@@ -419,7 +419,7 @@ Expected:
 - Create: `app/src/lib/domain/calculateMargins.ts`
 - Create: `app/src/test/calculateMargins.test.ts`
 
-- [ ] **Step 1: 실패 테스트 작성**
+- [x] **Step 1: 실패 테스트 작성**
 
 다음 케이스를 테스트한다.
 
@@ -432,7 +432,7 @@ Expected:
 마진율이 0 이상 20% 미만이면 low_margin 상태가 된다.
 ```
 
-- [ ] **Step 2: 테스트 실패 확인**
+- [x] **Step 2: 테스트 실패 확인**
 
 Run:
 
@@ -447,7 +447,7 @@ Expected:
 calculateMargins 함수가 없어 실패한다.
 ```
 
-- [ ] **Step 3: 계산 함수 구현**
+- [x] **Step 3: 계산 함수 구현**
 
 `calculateMargins.ts`는 다음 함수를 제공한다.
 
@@ -461,7 +461,7 @@ export function calculateMargins(
 
 상품 매칭 키는 `${productName}::${optionName}`로 만든다. 수수료는 원 단위 반올림한다.
 
-- [ ] **Step 4: 테스트 통과 확인**
+- [x] **Step 4: 테스트 통과 확인**
 
 Run:
 
