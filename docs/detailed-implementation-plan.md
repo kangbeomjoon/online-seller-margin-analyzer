@@ -603,7 +603,7 @@ export async function loadSampleData(): Promise<{
 }>
 ```
 
-- [ ] **Step 3: 브라우저에서 로딩 확인**
+- [x] **Step 3: 브라우저에서 로딩 확인**
 
 Task 9에서 `샘플 데이터로 체험하기` 버튼이 추가된 뒤 브라우저에서 최종 확인한다.
 
@@ -633,11 +633,11 @@ Expected:
 - Create: `app/src/components/ValidationPanel.tsx`
 - Create: `app/src/components/DownloadPanel.tsx`
 
-- [ ] **Step 1: 화면 레이아웃 구현**
+- [x] **Step 1: 화면 레이아웃 구현**
 
 첫 화면은 랜딩 페이지가 아니라 실제 대시보드 화면으로 만든다. 상단에는 업로드/샘플 데이터 패널, 그 아래에 KPI와 차트, 테이블, 경고 패널을 배치한다.
 
-- [ ] **Step 2: 업로드 패널 구현**
+- [x] **Step 2: 업로드 패널 구현**
 
 4개 파일 입력을 제공한다.
 
@@ -650,7 +650,7 @@ Expected:
 
 샘플 데이터로 체험하기 버튼을 제공한다.
 
-- [ ] **Step 3: KPI 카드 구현**
+- [x] **Step 3: KPI 카드 구현**
 
 다음 값을 표시한다.
 
@@ -663,7 +663,7 @@ Expected:
 원가 미등록 주문 수
 ```
 
-- [ ] **Step 4: 차트 구현**
+- [x] **Step 4: 차트 구현**
 
 Recharts로 다음 차트를 만든다.
 
@@ -672,7 +672,7 @@ Recharts로 다음 차트를 만든다.
 플랫폼별 매출/순이익 비교 바 차트
 ```
 
-- [ ] **Step 5: 상품별 마진 테이블 구현**
+- [x] **Step 5: 상품별 마진 테이블 구현**
 
 테이블 컬럼:
 
@@ -692,11 +692,11 @@ Recharts로 다음 차트를 만든다.
 
 정렬은 순이익, 마진율, 판매수량 기준을 우선 구현한다.
 
-- [ ] **Step 6: 경고 패널 구현**
+- [x] **Step 6: 경고 패널 구현**
 
 `ValidationReport`를 사용해 원가 미등록, 배송비 누락, 적자 TOP 10, 저마진 TOP 10을 보여준다.
 
-- [ ] **Step 7: 반응형 확인**
+- [x] **Step 7: 반응형 확인**
 
 Run:
 
@@ -717,7 +717,7 @@ Expected:
 - Create: `app/src/lib/domain/exportWorkbook.ts`
 - Modify: `app/src/components/DownloadPanel.tsx`
 
-- [ ] **Step 1: 워크북 생성 함수 구현**
+- [x] **Step 1: 워크북 생성 함수 구현**
 
 ExcelJS로 다음 시트를 만든다.
 
@@ -729,7 +729,7 @@ ExcelJS로 다음 시트를 만든다.
 검증 경고
 ```
 
-- [ ] **Step 2: 다운로드 버튼 연결**
+- [x] **Step 2: 다운로드 버튼 연결**
 
 버튼 3개를 제공한다.
 
@@ -739,7 +739,7 @@ ExcelJS로 다음 시트를 만든다.
 월별 요약 다운로드
 ```
 
-- [ ] **Step 3: 파일명 규칙 적용**
+- [x] **Step 3: 파일명 규칙 적용**
 
 다운로드 파일명:
 
@@ -749,7 +749,7 @@ product-margin-analysis-2026-sample.xlsx
 monthly-profit-summary-2026-sample.xlsx
 ```
 
-- [ ] **Step 4: 다운로드 수동 검증**
+- [x] **Step 4: 다운로드 수동 검증**
 
 브라우저에서 다운로드 후 엑셀 파일을 열어 시트명과 주요 숫자가 대시보드와 일치하는지 확인한다.
 
@@ -760,7 +760,7 @@ monthly-profit-summary-2026-sample.xlsx
 - Create: `portfolio/README.md`
 - Create: `kmong-page/draft.md`
 
-- [ ] **Step 1: 전체 테스트 실행**
+- [x] **Step 1: 전체 테스트 실행**
 
 Run:
 
@@ -775,7 +775,7 @@ Expected:
 모든 테스트가 통과한다.
 ```
 
-- [ ] **Step 2: 빌드 실행**
+- [x] **Step 2: 빌드 실행**
 
 Run:
 
@@ -790,7 +790,7 @@ Expected:
 Next.js production build가 성공한다.
 ```
 
-- [ ] **Step 3: 화면 캡처 4장 제작**
+- [x] **Step 3: 화면 캡처 4장 제작**
 
 필수 캡처:
 
@@ -802,7 +802,7 @@ Next.js production build가 성공한다.
 엑셀 다운로드 영역
 ```
 
-- [ ] **Step 4: 포트폴리오 README 작성**
+- [x] **Step 4: 포트폴리오 README 작성**
 
 `portfolio/README.md`에는 다음을 넣는다.
 
@@ -817,7 +817,7 @@ Next.js production build가 성공한다.
 확장 가능 항목
 ```
 
-- [ ] **Step 5: 크몽 상세페이지 초안 작성**
+- [x] **Step 5: 크몽 상세페이지 초안 작성**
 
 `kmong-page/draft.md`에는 다음을 넣는다.
 
