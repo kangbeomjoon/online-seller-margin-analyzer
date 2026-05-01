@@ -23,7 +23,7 @@ export function MonthlyTrendChart({ data }: MonthlyTrendChartProps) {
         <h2 className="text-base font-bold text-[#1f2933]">월별 매출·순이익</h2>
       </div>
       <div className="h-[280px]">
-        <ResponsiveContainer height="100%" width="100%">
+        <ResponsiveContainer height="100%" minHeight={280} minWidth={0} width="100%">
           <BarChart data={data}>
             <CartesianGrid stroke="#edf1f5" vertical={false} />
             <XAxis dataKey="orderMonth" tick={{ fill: "#697586", fontSize: 12 }} />
