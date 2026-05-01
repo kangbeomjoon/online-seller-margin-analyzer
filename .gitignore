@@ -1,0 +1,11 @@
+.DS_Store
+node_modules/
+.next/
+dist/
+build/
+coverage/
+.env
+.env.*
+!.env.example
+app/public/sample-data/
+outputs/screenshots/
