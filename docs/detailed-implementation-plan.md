@@ -524,7 +524,7 @@ KPI, 월별, 플랫폼별, 상품별 집계 테스트가 통과한다.
 - Create: `app/src/lib/domain/validations.ts`
 - Create: `app/src/test/validations.test.ts`
 
-- [ ] **Step 1: 실패 테스트 작성**
+- [x] **Step 1: 실패 테스트 작성**
 
 다음 경고를 테스트한다.
 
@@ -537,7 +537,7 @@ KPI, 월별, 플랫폼별, 상품별 집계 테스트가 통과한다.
 계산 제외 주문
 ```
 
-- [ ] **Step 2: 검증 함수 구현**
+- [x] **Step 2: 검증 함수 구현**
 
 `validations.ts`는 다음 함수를 제공한다.
 
@@ -545,7 +545,7 @@ KPI, 월별, 플랫폼별, 상품별 집계 테스트가 통과한다.
 export function buildValidationReport(orders: CalculatedOrder[]): ValidationReport
 ```
 
-- [ ] **Step 3: 테스트 통과 확인**
+- [x] **Step 3: 테스트 통과 확인**
 
 Run:
 
