@@ -9,3 +9,4 @@ coverage/
 !.env.example
 app/public/sample-data/
 outputs/screenshots/
+.worktrees/
