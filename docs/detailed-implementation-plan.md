@@ -243,7 +243,7 @@ Build completes successfully.
 **Files:**
 - Create: `app/src/lib/domain/types.ts`
 
-- [ ] **Step 1: 타입 파일 생성**
+- [x] **Step 1: 타입 파일 생성**
 
 `types.ts`에 다음 타입을 정의한다.
 
@@ -334,7 +334,7 @@ export interface CalculatedOrder extends StandardOrder {
 }
 ```
 
-- [ ] **Step 2: 타입 검사**
+- [x] **Step 2: 타입 검사**
 
 Run:
 
