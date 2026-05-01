@@ -96,7 +96,7 @@ online-seller-margin-analyzer/
 - Create: `sample-data/product-costs.csv`
 - Create: `sample-data/fee-rules.csv`
 
-- [ ] **Step 1: 상품 원가표 작성**
+- [x] **Step 1: 상품 원가표 작성**
 
 `sample-data/product-costs.csv`에 10개 상품과 14~18개 옵션을 작성한다.
 
@@ -117,7 +117,7 @@ P-010 에코 장바구니
 
 원가표에는 일부러 주문 CSV에 등장하지 않는 상품도 1개 포함한다. 주문 CSV에는 원가표에 없는 상품도 1개 포함해 원가 미등록 경고를 만든다.
 
-- [ ] **Step 2: 수수료 설정표 작성**
+- [x] **Step 2: 수수료 설정표 작성**
 
 `sample-data/fee-rules.csv`에는 다음 값을 사용한다.
 
@@ -127,7 +127,7 @@ smartstore,0.035,0.018,0
 coupang,0.085,0.022,150
 ```
 
-- [ ] **Step 3: 스마트스토어 주문 CSV 작성**
+- [x] **Step 3: 스마트스토어 주문 CSV 작성**
 
 `sample-data/smartstore-orders.csv`는 40~60건으로 작성한다. 기간은 2026-01-01부터 2026-03-31까지 분산한다.
 
@@ -142,11 +142,11 @@ coupang,0.085,0.022,150
 반품
 ```
 
-- [ ] **Step 4: 쿠팡 주문 CSV 작성**
+- [x] **Step 4: 쿠팡 주문 CSV 작성**
 
 `sample-data/coupang-orders.csv`는 40~60건으로 작성한다. 스마트스토어와 동일 상품 일부를 포함해 플랫폼 수수료 차이를 보여준다.
 
-- [ ] **Step 5: CSV 행 수 확인**
+- [x] **Step 5: CSV 행 수 확인**
 
 Run:
 
