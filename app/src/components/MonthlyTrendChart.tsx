@@ -18,7 +18,7 @@ interface MonthlyTrendChartProps {
 
 export function MonthlyTrendChart({ data }: MonthlyTrendChartProps) {
   return (
-    <section className="rounded-md border border-[#d8dee8] bg-white p-4">
+    <section className="min-w-0 rounded-md border border-[#d8dee8] bg-white p-4">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-base font-bold text-[#1f2933]">월별 매출·순이익</h2>
       </div>

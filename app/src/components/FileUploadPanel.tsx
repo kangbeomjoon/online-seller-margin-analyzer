@@ -5,10 +5,13 @@ import { FileSpreadsheet, RefreshCw, Upload } from "lucide-react";
 import type { SampleDataCsvs } from "@/lib/sample-data/loadSampleData";
 
 type CsvKey = keyof SampleDataCsvs;
+type DataSource = "empty" | "sample" | "upload";
 
 interface FileUploadPanelProps {
   isLoading: boolean;
   loadedFileCount: number;
+  dataSource: DataSource;
+  preparedCsvKeys: CsvKey[];
   onBuildUploadedReport: () => void;
   onFileChange: (
     key: CsvKey,
@@ -27,20 +30,29 @@ const FILE_INPUTS: { key: CsvKey; label: string }[] = [
 export function FileUploadPanel({
   isLoading,
   loadedFileCount,
+  dataSource,
+  preparedCsvKeys,
   onBuildUploadedReport,
   onFileChange,
   onLoadSampleData,
 }: FileUploadPanelProps) {
+  const sourceLabel =
+    dataSource === "sample"
+      ? "샘플 데이터 적용 중"
+      : dataSource === "upload"
+        ? "업로드 파일 기준"
+        : "CSV 대기 중";
+
   return (
-    <section className="rounded-md border border-[#d8dee8] bg-white">
+    <section className="min-w-0 rounded-md border border-[#d8dee8] bg-white">
       <div className="flex flex-col gap-3 border-b border-[#e4e9f0] px-4 py-4 lg:flex-row lg:items-center lg:justify-between">
-        <div>
+        <div className="min-w-0">
           <h2 className="text-base font-bold text-[#1f2933]">데이터 입력</h2>
           <p className="mt-1 text-sm text-[#697586]">
             CSV 4종을 기준으로 정산·마진 리포트를 생성합니다.
           </p>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex min-w-0 flex-wrap gap-2">
           <button
             className="inline-flex h-10 items-center gap-2 rounded-md bg-[#2f6f68] px-4 text-sm font-semibold text-white hover:bg-[#255b56] disabled:cursor-not-allowed disabled:opacity-60"
             type="button"
@@ -66,9 +78,16 @@ export function FileUploadPanel({
             className="flex min-h-[96px] flex-col justify-between rounded-md border border-[#d8dee8] bg-[#fbfcfd] p-3"
             key={input.key}
           >
-            <span className="flex items-center gap-2 text-sm font-semibold text-[#1f2933]">
-              <FileSpreadsheet className="h-4 w-4 text-[#3f6f68]" />
-              {input.label}
+            <span className="flex flex-wrap items-center gap-2">
+              <span className="flex items-center gap-2 text-sm font-semibold text-[#1f2933]">
+                <FileSpreadsheet className="h-4 w-4 text-[#3f6f68]" />
+                {input.label}
+              </span>
+              {preparedCsvKeys.includes(input.key) ? (
+                <span className="shrink-0 rounded-md bg-[#eaf2f0] px-2 py-1 text-[11px] font-semibold text-[#255b56]">
+                  준비됨
+                </span>
+              ) : null}
             </span>
             <input
               className="mt-3 block w-full text-xs text-[#4b5563] file:mr-3 file:rounded-md file:border-0 file:bg-[#eaf2f0] file:px-3 file:py-2 file:text-xs file:font-semibold file:text-[#255b56]"
@@ -79,8 +98,9 @@ export function FileUploadPanel({
           </label>
         ))}
       </div>
-      <div className="border-t border-[#eef2f6] px-4 py-3 text-sm text-[#697586]">
-        현재 준비된 파일: {loadedFileCount}/4
+      <div className="flex flex-col gap-1 border-t border-[#eef2f6] px-4 py-3 text-sm text-[#697586] sm:flex-row sm:items-center sm:justify-between">
+        <span>현재 준비된 파일: {loadedFileCount}/4</span>
+        <span className="font-medium text-[#38635c]">{sourceLabel}</span>
       </div>
     </section>
   );

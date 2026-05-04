@@ -20,11 +20,13 @@ import { DownloadPanel } from "./DownloadPanel";
 
 type CsvKey = keyof SampleDataCsvs;
 type CsvInputState = Partial<Record<CsvKey, string | Promise<string>>>;
+type DataSource = "empty" | "sample" | "upload";
 
 const EMPTY_CSVS: CsvInputState = {};
 
 export function DashboardShell() {
   const [csvs, setCsvs] = useState<CsvInputState>(EMPTY_CSVS);
+  const [dataSource, setDataSource] = useState<DataSource>("empty");
   const [report, setReport] = useState<SampleReport | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -32,6 +34,13 @@ export function DashboardShell() {
 
   const loadedFileCount = useMemo(
     () => Object.values(csvs).filter(Boolean).length,
+    [csvs],
+  );
+  const preparedCsvKeys = useMemo(
+    () =>
+      (Object.entries(csvs) as [CsvKey, string | Promise<string> | undefined][])
+        .filter(([, value]) => Boolean(value))
+        .map(([key]) => key),
     [csvs],
   );
 
@@ -50,6 +59,7 @@ export function DashboardShell() {
     void loadSampleData()
       .then((sampleCsvs) => {
         setCsvs(sampleCsvs);
+        setDataSource("sample");
         setReport(buildSampleReport(sampleCsvs));
       })
       .catch((error: unknown) => {
@@ -67,6 +77,7 @@ export function DashboardShell() {
     try {
       const sampleCsvs = await loadSampleData();
       setCsvs(sampleCsvs);
+      setDataSource("sample");
       setReport(buildSampleReport(sampleCsvs));
     } catch (error) {
       setErrorMessage(toErrorMessage(error));
@@ -89,6 +100,7 @@ export function DashboardShell() {
       ...current,
       [key]: file.text(),
     }));
+    setDataSource("upload");
   }
 
   async function handleBuildUploadedReport() {
@@ -103,10 +115,10 @@ export function DashboardShell() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f6f7f9] text-[#202124]">
-      <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-5 px-4 py-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen overflow-x-hidden bg-[#f6f7f9] text-[#202124]">
+      <div className="mx-auto flex max-w-[1440px] min-w-0 flex-col gap-5 px-4 py-4 sm:px-6 lg:px-8">
         <header className="flex flex-col gap-3 border-b border-[#d8dee8] pb-4 lg:flex-row lg:items-end lg:justify-between">
-          <div>
+          <div className="min-w-0">
             <p className="text-sm font-semibold text-[#38635c]">
               온라인 셀러 정산·마진 자동 분석기
             </p>
@@ -114,7 +126,7 @@ export function DashboardShell() {
               셀러 마진 리포트 자동화 대시보드
             </h1>
           </div>
-          <div className="grid grid-cols-2 gap-2 text-sm sm:grid-cols-4">
+          <div className="grid w-full min-w-0 grid-cols-2 gap-2 text-sm sm:grid-cols-4 lg:w-auto">
             <StatusBadge label="CSV" value={`${loadedFileCount}/4`} />
             <StatusBadge
               label="주문"
@@ -131,6 +143,8 @@ export function DashboardShell() {
         <FileUploadPanel
           isLoading={isLoading}
           loadedFileCount={loadedFileCount}
+          preparedCsvKeys={preparedCsvKeys}
+          dataSource={dataSource}
           onBuildUploadedReport={handleBuildUploadedReport}
           onFileChange={handleFileChange}
           onLoadSampleData={handleLoadSampleData}
@@ -146,16 +160,14 @@ export function DashboardShell() {
         {report ? (
           <>
             <KpiSummary metrics={report.metrics} />
-            <section className="grid gap-4 xl:grid-cols-2">
+            <section className="grid min-w-0 gap-4 xl:grid-cols-2">
               <MonthlyTrendChart data={report.metrics.monthly} />
               <PlatformComparisonChart data={report.metrics.platforms} />
             </section>
-            <section className="grid gap-4 xl:grid-cols-[minmax(0,1.55fr)_minmax(360px,0.85fr)]">
-              <ProductMarginTable products={report.metrics.products} />
-              <div className="flex flex-col gap-4">
-                <ValidationPanel report={report.validationReport} />
-                <DownloadPanel report={report} />
-              </div>
+            <ProductMarginTable products={report.metrics.products} />
+            <section className="grid min-w-0 gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(320px,0.45fr)]">
+              <ValidationPanel report={report.validationReport} />
+              <DownloadPanel report={report} />
             </section>
           </>
         ) : (
@@ -183,7 +195,7 @@ export function DashboardShell() {
 
 function StatusBadge({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md border border-[#d8dee8] bg-white px-3 py-2">
+    <div className="min-w-0 rounded-md border border-[#d8dee8] bg-white px-3 py-2">
       <div className="text-xs font-medium text-[#697586]">{label}</div>
       <div className="mt-1 font-semibold text-[#1f2933]">{value}</div>
     </div>

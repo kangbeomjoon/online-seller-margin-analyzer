@@ -30,7 +30,7 @@ export function ProductMarginTable({ products }: ProductMarginTableProps) {
   );
 
   return (
-    <section className="overflow-hidden rounded-md border border-[#d8dee8] bg-white">
+    <section className="min-w-0 overflow-hidden rounded-md border border-[#d8dee8] bg-white">
       <div className="flex flex-col gap-3 border-b border-[#e4e9f0] px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="flex items-center gap-2 text-base font-bold text-[#1f2933]">
           <Table2 className="h-4 w-4 text-[#3f6f68]" />
