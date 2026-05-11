@@ -6,6 +6,7 @@ import {
   useRef,
   useState,
   type ChangeEvent,
+  type DragEvent as ReactDragEvent,
 } from "react";
 import { AlertCircle, RefreshCw } from "lucide-react";
 import { buildSampleReport, type SampleReport } from "@/lib/sample-data/buildSampleReport";
@@ -21,11 +22,23 @@ import { DownloadPanel } from "./DownloadPanel";
 type CsvKey = keyof SampleDataCsvs;
 type CsvInputState = Partial<Record<CsvKey, string | Promise<string>>>;
 type DataSource = "empty" | "sample" | "upload";
+type SelectedFileNames = Partial<Record<CsvKey, string>>;
 
 const EMPTY_CSVS: CsvInputState = {};
+const EMPTY_FILE_NAMES: SelectedFileNames = {};
+const SAMPLE_FILE_NAMES: SelectedFileNames = {
+  smartstoreCsv: "smartstore-orders.csv",
+  coupangCsv: "coupang-orders.csv",
+  productCostsCsv: "product-costs.csv",
+  feeRulesCsv: "fee-rules.csv",
+};
+const DOWNLOAD_DROP_MESSAGE =
+  "다운로드 목록 항목은 앱이 파일로 받을 수 없습니다. Finder에서 CSV 파일을 끌어오거나 파일 선택을 사용하세요.";
 
 export function DashboardShell() {
   const [csvs, setCsvs] = useState<CsvInputState>(EMPTY_CSVS);
+  const [selectedFileNames, setSelectedFileNames] =
+    useState<SelectedFileNames>(EMPTY_FILE_NAMES);
   const [dataSource, setDataSource] = useState<DataSource>("empty");
   const [report, setReport] = useState<SampleReport | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -45,6 +58,26 @@ export function DashboardShell() {
   );
 
   useEffect(() => {
+    function preventUnhandledFileDrop(event: DragEvent) {
+      if (
+        event.dataTransfer?.files.length ||
+        event.dataTransfer?.types.includes("text/uri-list") ||
+        event.dataTransfer?.types.includes("DownloadURL")
+      ) {
+        event.preventDefault();
+      }
+    }
+
+    window.addEventListener("dragover", preventUnhandledFileDrop);
+    window.addEventListener("drop", preventUnhandledFileDrop);
+
+    return () => {
+      window.removeEventListener("dragover", preventUnhandledFileDrop);
+      window.removeEventListener("drop", preventUnhandledFileDrop);
+    };
+  }, []);
+
+  useEffect(() => {
     if (
       didAutoLoadSample.current ||
       !new URLSearchParams(window.location.search).has("sample")
@@ -59,6 +92,7 @@ export function DashboardShell() {
     void loadSampleData()
       .then((sampleCsvs) => {
         setCsvs(sampleCsvs);
+        setSelectedFileNames(SAMPLE_FILE_NAMES);
         setDataSource("sample");
         setReport(buildSampleReport(sampleCsvs));
       })
@@ -77,6 +111,7 @@ export function DashboardShell() {
     try {
       const sampleCsvs = await loadSampleData();
       setCsvs(sampleCsvs);
+      setSelectedFileNames(SAMPLE_FILE_NAMES);
       setDataSource("sample");
       setReport(buildSampleReport(sampleCsvs));
     } catch (error) {
@@ -96,11 +131,64 @@ export function DashboardShell() {
       return;
     }
 
+    handleSelectedFiles([{ key, file }]);
+  }
+
+  function handleFileDrop(key: CsvKey, file: File) {
+    handleSelectedFiles([{ key, file }]);
+  }
+
+  function handlePageDragOver(event: ReactDragEvent<HTMLElement>) {
+    if (isExternalFileLikeDrag(event.dataTransfer)) {
+      event.preventDefault();
+    }
+  }
+
+  function handlePageDrop(event: ReactDragEvent<HTMLElement>) {
+    if (!isExternalFileLikeDrag(event.dataTransfer)) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const files = Array.from(event.dataTransfer.files);
+
+    if (!files.length) {
+      setErrorMessage(DOWNLOAD_DROP_MESSAGE);
+      return;
+    }
+
+    const matchedFiles = files.flatMap((file) => {
+      const key = detectCsvKey(file);
+      return key ? [{ key, file }] : [];
+    });
+
+    if (!matchedFiles.length) {
+      setErrorMessage(
+        "파일명으로 CSV 종류를 판단할 수 없습니다. 각 카드의 파일 선택 버튼이나 해당 카드 위 드롭을 사용하세요.",
+      );
+      return;
+    }
+
+    handleSelectedFiles(matchedFiles);
+  }
+
+  function handleSelectedFiles(entries: { key: CsvKey; file: File }[]) {
     setCsvs((current) => ({
-      ...current,
-      [key]: file.text(),
+      ...(dataSource === "sample" ? EMPTY_CSVS : current),
+      ...Object.fromEntries(
+        entries.map(({ key, file }) => [key, file.text()] as const),
+      ),
+    }));
+    setSelectedFileNames((current) => ({
+      ...(dataSource === "sample" ? EMPTY_FILE_NAMES : current),
+      ...Object.fromEntries(
+        entries.map(({ key, file }) => [key, file.name] as const),
+      ),
     }));
     setDataSource("upload");
+    setReport(null);
+    setErrorMessage(null);
   }
 
   async function handleBuildUploadedReport() {
@@ -114,8 +202,20 @@ export function DashboardShell() {
     }
   }
 
+  function handleStartManualUpload() {
+    setCsvs(EMPTY_CSVS);
+    setSelectedFileNames(EMPTY_FILE_NAMES);
+    setDataSource("empty");
+    setReport(null);
+    setErrorMessage(null);
+  }
+
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[#f6f7f9] text-[#202124]">
+    <main
+      className="min-h-screen overflow-x-hidden bg-[#f6f7f9] text-[#202124]"
+      onDragOver={handlePageDragOver}
+      onDrop={handlePageDrop}
+    >
       <div className="mx-auto flex max-w-[1440px] min-w-0 flex-col gap-5 px-4 py-4 sm:px-6 lg:px-8">
         <header className="flex flex-col gap-3 border-b border-[#d8dee8] pb-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="min-w-0">
@@ -145,9 +245,12 @@ export function DashboardShell() {
           loadedFileCount={loadedFileCount}
           preparedCsvKeys={preparedCsvKeys}
           dataSource={dataSource}
+          selectedFileNames={selectedFileNames}
           onBuildUploadedReport={handleBuildUploadedReport}
           onFileChange={handleFileChange}
+          onFileDrop={handleFileDrop}
           onLoadSampleData={handleLoadSampleData}
+          onStartManualUpload={handleStartManualUpload}
         />
 
         {errorMessage ? (
@@ -200,6 +303,45 @@ function StatusBadge({ label, value }: { label: string; value: string }) {
       <div className="mt-1 font-semibold text-[#1f2933]">{value}</div>
     </div>
   );
+}
+
+function isExternalFileLikeDrag(dataTransfer: DataTransfer) {
+  return (
+    dataTransfer.files.length > 0 ||
+    dataTransfer.types.includes("Files") ||
+    dataTransfer.types.includes("text/uri-list") ||
+    dataTransfer.types.includes("DownloadURL")
+  );
+}
+
+function detectCsvKey(file: File): CsvKey | null {
+  const normalizedName = file.name.toLowerCase();
+
+  if (normalizedName.includes("smartstore")) {
+    return "smartstoreCsv";
+  }
+
+  if (normalizedName.includes("coupang")) {
+    return "coupangCsv";
+  }
+
+  if (
+    normalizedName.includes("product-cost") ||
+    normalizedName.includes("cost") ||
+    normalizedName.includes("원가")
+  ) {
+    return "productCostsCsv";
+  }
+
+  if (
+    normalizedName.includes("fee-rule") ||
+    normalizedName.includes("fee") ||
+    normalizedName.includes("수수료")
+  ) {
+    return "feeRulesCsv";
+  }
+
+  return null;
 }
 
 async function resolveCsvs(
