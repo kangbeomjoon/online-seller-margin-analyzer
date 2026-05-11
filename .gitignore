@@ -7,6 +7,5 @@ coverage/
 .env
 .env.*
 !.env.example
-app/public/sample-data/
 outputs/screenshots/
 .worktrees/

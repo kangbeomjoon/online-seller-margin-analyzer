@@ -1,4 +1,4 @@
-import { cp, mkdir } from "node:fs/promises";
+import { access, cp, mkdir } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -16,8 +16,26 @@ const files = [
 
 await mkdir(publicSampleDataDir, { recursive: true });
 
+const hasProjectSampleData = await pathExists(sampleDataDir);
+const hasPublicSampleData = await Promise.all(
+  files.map((file) => pathExists(join(publicSampleDataDir, file))),
+).then((results) => results.every(Boolean));
+
+if (!hasProjectSampleData && hasPublicSampleData) {
+  process.exit(0);
+}
+
 await Promise.all(
   files.map((file) =>
     cp(join(sampleDataDir, file), join(publicSampleDataDir, file)),
   ),
 );
+
+async function pathExists(path) {
+  try {
+    await access(path);
+    return true;
+  } catch {
+    return false;
+  }
+}
