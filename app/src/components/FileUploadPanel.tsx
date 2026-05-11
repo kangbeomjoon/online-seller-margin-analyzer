@@ -1,23 +1,27 @@
 "use client";
 
-import type { ChangeEvent } from "react";
+import type { ChangeEvent, DragEvent } from "react";
 import { FileSpreadsheet, RefreshCw, Upload } from "lucide-react";
 import type { SampleDataCsvs } from "@/lib/sample-data/loadSampleData";
 
 type CsvKey = keyof SampleDataCsvs;
 type DataSource = "empty" | "sample" | "upload";
+type SelectedFileNames = Partial<Record<CsvKey, string>>;
 
 interface FileUploadPanelProps {
   isLoading: boolean;
   loadedFileCount: number;
   dataSource: DataSource;
   preparedCsvKeys: CsvKey[];
+  selectedFileNames: SelectedFileNames;
   onBuildUploadedReport: () => void;
   onFileChange: (
     key: CsvKey,
     event: ChangeEvent<HTMLInputElement>,
   ) => void;
+  onFileDrop: (key: CsvKey, file: File) => void;
   onLoadSampleData: () => void;
+  onStartManualUpload: () => void;
 }
 
 const FILE_INPUTS: { key: CsvKey; label: string }[] = [
@@ -32,16 +36,44 @@ export function FileUploadPanel({
   loadedFileCount,
   dataSource,
   preparedCsvKeys,
+  selectedFileNames = {},
   onBuildUploadedReport,
   onFileChange,
+  onFileDrop,
   onLoadSampleData,
+  onStartManualUpload,
 }: FileUploadPanelProps) {
+  const isSampleApplied =
+    dataSource === "sample" && loadedFileCount === FILE_INPUTS.length;
   const sourceLabel =
     dataSource === "sample"
-      ? "샘플 데이터 적용 중"
+      ? "샘플 데이터 적용 완료"
       : dataSource === "upload"
         ? "업로드 파일 기준"
         : "CSV 대기 중";
+  const sampleButtonLabel = isLoading
+    ? "샘플 데이터 불러오는 중"
+    : isSampleApplied
+      ? "처음부터 직접 업로드"
+      : "샘플 데이터로 체험하기";
+  const handleSampleButtonClick = isSampleApplied
+    ? onStartManualUpload
+    : onLoadSampleData;
+  function handleDragOver(event: DragEvent<HTMLLabelElement>) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  function handleDrop(key: CsvKey, event: DragEvent<HTMLLabelElement>) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const file = event.dataTransfer.files[0];
+
+    if (file) {
+      onFileDrop(key, file);
+    }
+  }
 
   return (
     <section className="min-w-0 rounded-md border border-[#d8dee8] bg-white">
@@ -57,10 +89,10 @@ export function FileUploadPanel({
             className="inline-flex h-10 items-center gap-2 rounded-md bg-[#2f6f68] px-4 text-sm font-semibold text-white hover:bg-[#255b56] disabled:cursor-not-allowed disabled:opacity-60"
             type="button"
             disabled={isLoading}
-            onClick={onLoadSampleData}
+            onClick={handleSampleButtonClick}
           >
             <RefreshCw className="h-4 w-4" />
-            샘플 데이터로 체험하기
+            {sampleButtonLabel}
           </button>
           <button
             className="inline-flex h-10 items-center gap-2 rounded-md border border-[#b7c1cc] bg-white px-4 text-sm font-semibold text-[#1f2933] hover:bg-[#f4f7fa]"
@@ -77,6 +109,8 @@ export function FileUploadPanel({
           <label
             className="flex min-h-[96px] flex-col justify-between rounded-md border border-[#d8dee8] bg-[#fbfcfd] p-3"
             key={input.key}
+            onDragOver={handleDragOver}
+            onDrop={(event) => handleDrop(input.key, event)}
           >
             <span className="flex flex-wrap items-center gap-2">
               <span className="flex items-center gap-2 text-sm font-semibold text-[#1f2933]">
@@ -90,11 +124,19 @@ export function FileUploadPanel({
               ) : null}
             </span>
             <input
-              className="mt-3 block w-full text-xs text-[#4b5563] file:mr-3 file:rounded-md file:border-0 file:bg-[#eaf2f0] file:px-3 file:py-2 file:text-xs file:font-semibold file:text-[#255b56]"
+              className="sr-only"
               type="file"
               accept=".csv,text/csv"
               onChange={(event) => onFileChange(input.key, event)}
             />
+            <span className="mt-3 flex flex-wrap items-center gap-3 text-xs text-[#4b5563]">
+              <span className="rounded-md bg-[#eaf2f0] px-3 py-2 font-semibold text-[#255b56]">
+                파일 선택
+              </span>
+              <span className="min-w-0 break-all">
+                {selectedFileNames[input.key] ?? "선택된 파일 없음"}
+              </span>
+            </span>
           </label>
         ))}
       </div>
